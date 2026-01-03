@@ -1,0 +1,4 @@
+[submodule "libgmp"]
+	path = libgmp
+	url = https://github.com/andrew-m-h/libgmp
+	branch = e6924e6

@@ -1,0 +1,10 @@
+all: smelulater
+
+smelulater: gmp_wrapper.o smelulater.o
+	ldc2 gmp_wrapper.o smelulater.o --of smelulater -L=-lgmp
+
+gmp_wrapper.o: gmp_wrapper.d
+	ldc2 -c gmp_wrapper.d -Ilibgmp/source
+
+smelulater.o: smelulater.d gmp_wrapper.d
+	ldc2 -preview=shortenedMethods -c smelulater.d -Ilibgmp/source
