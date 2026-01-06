@@ -7,15 +7,30 @@ import std.algorithm;
 
 import gmp_wrapper;
 
+version (Libedit) {
+    import libedit;
+}
+
 void main(string[] args) {
-    string prompt = args[1];
-    writeln(prompt);
-    auto words = Word(prompt);
-    writeln(words);
-    auto tokens = Token(words);
-    writeln(tokens);
-    auto evaluated = evaluate(tokens);
-    writeln(evaluated);
+    if (args.length > 1) {
+        writeln(args[1]);
+        writeln(args[1].calculate);
+        return;
+    }
+    version (Libedit) {
+        import core.stdc.string : strlen;
+        using_history();
+        for (char *line; (line = readline("> ")) != null;) {
+            if (!strlen(line))
+                continue;
+            writeln(line.to!string.calculate);
+            add_history(line);
+        }
+    }
+}
+
+Value calculate(string prompt) {
+    return cast(Value) prompt.Word.Token.evaluate;
 }
 
 Token evaluate(Token[] tokens) {
@@ -65,8 +80,7 @@ interface Token {
                 }
                 return new Time(time);
             }
-            Number n = new Number(w.contents);
-            return n;
+            return new Number(w.contents);
         case Word.Kind.Operator:
             with (Operator.Kind) switch (w.contents) {
             case "*": return new Operator(Times);
