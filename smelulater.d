@@ -7,9 +7,7 @@ import std.algorithm;
 
 import gmp_wrapper;
 
-version (Libedit) {
-    import libedit;
-}
+version (Libedit) import libedit;
 
 void main(string[] args) {
     if (args.length > 1) {
@@ -19,7 +17,6 @@ void main(string[] args) {
     }
     version (Libedit) {
         import core.stdc.string : strlen;
-        using_history();
         for (char *line; (line = readline("> ")) != null;) {
             if (!strlen(line))
                 continue;
@@ -146,14 +143,14 @@ class Operator : Token {
             }
         }
         fail:
-            return new Fail(format("Can't do %s with ‘%s’ and ‘%s’", kind, left, right));
+            return new Fail(format("Can't do %s with ‘%s’ and ‘%s’", niceName(kind), left, right));
     }
-    override string toString() const {
+    static string niceName(const Kind kind) {
         with (Kind) final switch(kind) {
-        case Plus: return "Plus";
-        case Minus: return "Minus";
-        case Times: return "Times";
-        case DividedBy: return "DividedBy";
+        case Plus: return "addition";
+        case Minus: return "subtraction";
+        case Times: return "multiplication";
+        case DividedBy: return "division";
         }
     }
 }
