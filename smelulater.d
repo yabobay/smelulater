@@ -110,7 +110,7 @@ class Operator : Token {
         if (kinds == [Token.Kind.Number, Token.Kind.Time])
             return opCall(right, left);
         if (kinds == [Token.Kind.Time, Token.Kind.Number]) {
-            if (kind == Kind.Times) 
+            if (kind == Kind.Times)
                 return new Time((cast(Number) right) * new Mpf(&(cast(Time) left).time));
             goto fail;
         }
@@ -196,7 +196,7 @@ class Number : Value {
     this(string s) { value = new Mpf(s); }
     this(uint value) {
         this();
-        this.value = value; 
+        this.value = value;
     }
     override string toString() const => value.toString;
 }
